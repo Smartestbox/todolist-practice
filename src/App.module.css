@@ -5,4 +5,28 @@
   display: flex;
 }
 
+button {
+  border: none;
+  border-radius: 5px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.error {
+  border: 2px solid red;
+  outline: none;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.filteredBtn {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.taskDone {
+  opacity: 0.4;
+}
 
