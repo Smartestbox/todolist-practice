@@ -3,6 +3,8 @@ import {FilterValuesType, TaskType} from "./App";
 import styles from './App.module.css'
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
+import {Button, Checkbox, IconButton} from "@mui/material";
+import {Delete} from "@mui/icons-material";
 
 type TodolistPropsType = {
     title: string
@@ -37,17 +39,15 @@ const Todolist: React.FC<TodolistPropsType> = ({
     const onCompletedClick = () => changeFilter('completed', todolistId)
     const RemoveTodolistHandler = () => removeTodolist(todolistId)
     const addTaskHandler = (title: string) => addTask(todolistId, title)
-    const updateTitleHandler = (title: string) => {
-        updateTodolistTitle(todolistId, title)
-    }
+    const updateTitleHandler = (title: string) => updateTodolistTitle(todolistId, title)
 
     return (
         <div>
             <h3>
                 <EditableSpan title={title} updateTitleHandler={updateTitleHandler}/>
-                <button onClick={RemoveTodolistHandler}>
-                    x
-                </button>
+                <IconButton onClick={RemoveTodolistHandler}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm addItem={addTaskHandler}/>
             <ul>
@@ -63,26 +63,40 @@ const Todolist: React.FC<TodolistPropsType> = ({
                             updateSpanTitle(todolistId, task.id, title)
                         }
                         return (
-                            <li key={task.id}>
-                                <input
-                                    type='checkbox'
+                            <li key={task.id} >
+                                <Checkbox
                                     checked={task.isDone}
-                                    onChange={onTaskStatusChange}/>
-                                <EditableSpan title={task.title} updateTitleHandler={updateTitleHandler}/>
-                                <button onClick={onRemoveTaskClick}>x</button>
+                                    onChange={onTaskStatusChange}
+                                />
+                                <EditableSpan
+                                    title={task.title}
+                                    updateTitleHandler={updateTitleHandler}
+                                />
+                                <IconButton onClick={onRemoveTaskClick}>
+                                    <Delete/>
+                                </IconButton>
                             </li>
                         )
                     })
                 }
             </ul>
-            <div className={styles.filterBtns}>
-                <button className={filter === 'all' ? styles.filteredBtn : ''} onClick={onAllClick}>All</button>
-                <button className={filter === 'active' ? styles.filteredBtn : ''} onClick={onActiveClick}>Active
-                </button>
-                <button className={filter === 'completed' ? styles.filteredBtn : ''}
-                        onClick={onCompletedClick}>Completed
-                </button>
-            </div>
+                <Button
+                    variant={filter === 'all' ? 'contained' : 'outlined'}
+                    onClick={onAllClick}
+                >
+                    All
+                </Button>
+                <Button
+                    variant={filter === 'active' ? 'contained' : 'outlined'} onClick={onActiveClick}
+                >
+                    Active
+                </Button>
+                <Button
+                    variant={filter === 'completed' ? 'contained' : 'outlined'}
+                    onClick={onCompletedClick}
+                >
+                    Completed
+                </Button>
         </div>
     );
 };

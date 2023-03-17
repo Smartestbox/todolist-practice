@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import styles from "./App.module.css";
+import {IconButton, TextField} from "@mui/material";
+import {AddBoxOutlined} from "@mui/icons-material";
 
 type AddItemFormPropsType = {
     addItem: (itemTitle: string) => void
@@ -42,21 +43,23 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({
     return (
         <>
             <div>
-                <input
-                    className={error ? styles.error : ''}
+                <TextField
+                    variant={'outlined'}
+                    label={'Type value'}
+                    error={error}
+                    helperText={error ? 'Title is required' : ''}
                     type="text"
                     value={itemTitle}
                     onChange={onInputChange}
                     onKeyPress={onEnter}
                 />
-                <button onClick={addItemHandler}>+</button>
+                <IconButton
+                    onClick={addItemHandler}
+                    color='primary'
+                >
+                    <AddBoxOutlined />
+                </IconButton>
             </div>
-            {
-                error &&
-                <div className={styles.errorMessage}>
-                    Task shouldn't be empty
-                </div>
-            }
         </>
     );
 };
