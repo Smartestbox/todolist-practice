@@ -5,11 +5,12 @@ type StateType = TodolistType[]
 
 export type RemoveTodolistAT = {
     type: 'REMOVE-TODOLIST'
-    id: string
+    todolistId: string
 }
 export type AddTodolistAT = {
     type: 'ADD-TODOLIST'
     title: string
+    todolistId: string
 }
 export type ChangeTodolistTitleAT = {
     type: 'CHANGE-TODOLIST-TITLE'
@@ -31,9 +32,9 @@ type ActionsType =
 export const todolistsReducer = (state: StateType, action: ActionsType): TodolistType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
-            return [...state.filter(todolist => todolist.id !== action.id)]
+            return [...state.filter(todolist => todolist.id !== action.todolistId)]
         case 'ADD-TODOLIST':
-            return [...state, {id: v1(), title: action.title, filter: 'all'}]
+            return [...state, {id: action.todolistId, title: action.title, filter: 'all'}]
         case 'CHANGE-TODOLIST-TITLE':
             return [...state.map(todolist =>
                 todolist.id === action.id ? {...todolist, title: action.title} :
@@ -49,19 +50,24 @@ export const todolistsReducer = (state: StateType, action: ActionsType): Todolis
 
 export const removeTodolistAC = (todolistId: string): RemoveTodolistAT => ({
     type: 'REMOVE-TODOLIST',
-    id: todolistId
+    todolistId: todolistId
 })
-export const addTodolistAC = (newTodolistTitle: string): AddTodolistAT => ({
+export const addTodolistAC = (title: string): AddTodolistAT => ({
     type: 'ADD-TODOLIST',
-    title: newTodolistTitle
+    title,
+    todolistId: v1()
 })
-export const changeTodolistTitleAC = (todolistId: string, newTodolistTitle: string): ChangeTodolistTitleAT => ({
+export const changeTodolistTitleAC = (
+    todolistId: string,
+    newTodolistTitle: string
+): ChangeTodolistTitleAT => ({
     type: 'CHANGE-TODOLIST-TITLE',
     id: todolistId,
     title: newTodolistTitle
 })
 export const changeTodolistFilterAC = (
-    todolistId: string, newTodolistFilter: FilterValuesType
+    todolistId: string,
+    newTodolistFilter: FilterValuesType
 ): ChangeTodolistFilterAT => ({
     type: 'CHANGE-TODOLIST-FILTER',
     id: todolistId,
