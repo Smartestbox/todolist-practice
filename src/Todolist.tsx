@@ -16,8 +16,8 @@ type TodolistPropsType = {
     changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean) => void
     removeTodolist: (todolistId: string) => void
     filter: FilterValuesType
-    updateSpanTitle: (todolistId: string, taskId: string, title: string) => void
-    updateTodolistTitle: (todolistId: string, title: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
 }
 
 const Todolist: React.FC<TodolistPropsType> = ({
@@ -30,8 +30,8 @@ const Todolist: React.FC<TodolistPropsType> = ({
                                                    changeTaskStatus,
                                                    removeTodolist,
                                                    filter,
-                                                   updateSpanTitle,
-                                                   updateTodolistTitle
+                                                   changeTaskTitle,
+                                                   changeTodolistTitle
                                                }) => {
 
     const onAllClick = () => changeTodolistFilter('all', todolistId)
@@ -39,7 +39,7 @@ const Todolist: React.FC<TodolistPropsType> = ({
     const onCompletedClick = () => changeTodolistFilter('completed', todolistId)
     const RemoveTodolistHandler = () => removeTodolist(todolistId)
     const addTaskHandler = (title: string) => addTask(todolistId, title)
-    const updateTitleHandler = (title: string) => updateTodolistTitle(todolistId, title)
+    const updateTitleHandler = (title: string) => changeTodolistTitle(todolistId, title)
 
     return (
         <div>
@@ -60,7 +60,7 @@ const Todolist: React.FC<TodolistPropsType> = ({
                             changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
                         }
                         const updateTitleHandler = (title: string) => {
-                            updateSpanTitle(todolistId, task.id, title)
+                            changeTaskTitle(todolistId, task.id, title)
                         }
                         return (
                             <li key={task.id} >
