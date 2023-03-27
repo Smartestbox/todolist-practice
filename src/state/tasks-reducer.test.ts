@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../AppWithRedux";
 import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
 test('correct task should be deleted from correct array', () => {
@@ -24,7 +24,7 @@ test('correct task should be deleted from correct array', () => {
 
     const action = removeTaskAC(todolistId2, '2')
 
-    const endState = tasksReducer(startState, action)
+    const endState: TasksStateType = tasksReducer(startState, action)
 
     expect(endState[todolistId1].length).toBe(4)
     expect(endState[todolistId2].length).toBe(3)
