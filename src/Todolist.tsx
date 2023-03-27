@@ -1,44 +1,41 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType, TaskType} from "./App";
-import styles from './App.module.css'
+import {FilterValuesType, TaskType} from "./AppWithRedux";
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootState} from "./state/store";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 
 type TodolistPropsType = {
     title: string
     todolistId: string
-    tasks: TaskType[]
-    removeTask: (todolistId: string, taskId: string) => void
     changeTodolistFilter: (filterValue: FilterValuesType, todolistId: string) => void
-    addTask: (todolistId: string, taskTitle: string) => void
-    changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean) => void
     removeTodolist: (todolistId: string) => void
     filter: FilterValuesType
-    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
     changeTodolistTitle: (todolistId: string, title: string) => void
 }
 
 const Todolist: React.FC<TodolistPropsType> = ({
                                                    title,
                                                    todolistId,
-                                                   tasks,
-                                                   removeTask,
                                                    changeTodolistFilter,
-                                                   addTask,
-                                                   changeTaskStatus,
                                                    removeTodolist,
                                                    filter,
-                                                   changeTaskTitle,
                                                    changeTodolistTitle
                                                }) => {
+    const tasks = useSelector<AppRootState, TaskType[]>(state => state.tasks[todolistId])
+    const dispatch = useDispatch()
+
+    let tasksForTodolist = filter === 'active' ? tasks.filter(task => !task.isDone)
+        : filter === 'completed' ? tasks.filter(task => task.isDone)
+            : tasks
 
     const onAllClick = () => changeTodolistFilter('all', todolistId)
     const onActiveClick = () => changeTodolistFilter('active', todolistId)
     const onCompletedClick = () => changeTodolistFilter('completed', todolistId)
     const RemoveTodolistHandler = () => removeTodolist(todolistId)
-    const addTaskHandler = (title: string) => addTask(todolistId, title)
     const updateTitleHandler = (title: string) => changeTodolistTitle(todolistId, title)
 
     return (
@@ -49,18 +46,20 @@ const Todolist: React.FC<TodolistPropsType> = ({
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm addItem={addTaskHandler}/>
+            <AddItemForm addItem={(title) => {
+                dispatch(addTaskAC(todolistId, title))}
+            }/>
             <ul>
                 {
-                    tasks.map(task => {
+                    tasksForTodolist.map(task => {
                         const onRemoveTaskClick = () => {
-                            removeTask(todolistId, task.id)
+                            dispatch(removeTaskAC(todolistId, task.id))
                         }
                         const onTaskStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
-                            changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
+                            dispatch(changeTaskStatusAC(todolistId, task.id, e.currentTarget.checked))
                         }
                         const updateTitleHandler = (title: string) => {
-                            changeTaskTitle(todolistId, task.id, title)
+                            dispatch(changeTaskTitleAC(todolistId, task.id, title))
                         }
                         return (
                             <li key={task.id} >

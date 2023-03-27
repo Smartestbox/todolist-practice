@@ -3,13 +3,13 @@ import {IconButton, TextField} from "@mui/material";
 import {AddBoxOutlined} from "@mui/icons-material";
 
 type AddItemFormPropsType = {
-    addItem: (itemTitle: string) => void
+    addItem: (title: string) => void
 }
 
 const AddItemForm: React.FC<AddItemFormPropsType> = ({
                                                          addItem,
                                                      }) => {
-    const [itemTitle, setItemTitle] = useState('')
+    const [title, setItemTitle] = useState('')
     const [error, setError] = useState<boolean>(false)
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,21 +20,21 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({
     }
 
     const addItemHandler = () => {
-        if (itemTitle.trim()) {
-            addItem(itemTitle.trim())
+        if (title.trim()) {
+            addItem(title.trim())
             setItemTitle('')
         }
-        if (itemTitle.trim() === '') {
+        if (title.trim() === '') {
             setError(true)
         }
     }
 
     const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (itemTitle.trim() && e.key === 'Enter') {
-            addItem(itemTitle.trim())
+        if (title.trim() && e.key === 'Enter') {
+            addItem(title.trim())
             setItemTitle('')
         }
-        if (itemTitle.trim() === '') {
+        if (title.trim() === '') {
             setError(true)
         }
     }
@@ -49,7 +49,7 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({
                     error={error}
                     helperText={error ? 'Title is required' : ''}
                     type="text"
-                    value={itemTitle}
+                    value={title}
                     onChange={onInputChange}
                     onKeyPress={onEnter}
                 />
